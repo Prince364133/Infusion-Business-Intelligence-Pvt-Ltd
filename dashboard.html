@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Queries Panel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: #fff;
+      padding: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #fff;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background: #111;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Submitted Queries</h2>
+  <table id="queriesTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Subject</th>
+        <th>Message</th>
+        <th>Time</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB7r7m7yFbiTwn8JR9N7UhTT6UZN8f26uo",
+      authDomain: "ibi-pvt-ltd.firebaseapp.com",
+      projectId: "ibi-pvt-ltd",
+      storageBucket: "ibi-pvt-ltd.firebasestorage.app",
+      messagingSenderId: "426790707099",
+      appId: "1:426790707099:web:679bafdaf60217cd568b3e",
+      measurementId: "G-0GJJQD4TVV"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const tableBody = document.querySelector('#queriesTable tbody');
+
+    db.ref('queries').on('value', snapshot => {
+      tableBody.innerHTML = '';
+      const data = snapshot.val();
+      for(let key in data){
+        const row = `<tr>
+          <td>${data[key].name}</td>
+          <td>${data[key].email}</td>
+          <td>${data[key].subject}</td>
+          <td>${data[key].message}</td>
+          <td>${new Date(data[key].timestamp).toLocaleString()}</td>
+        </tr>`;
+        tableBody.innerHTML += row;
+      }
+    });
+  </script>
+</body>
+</html>
