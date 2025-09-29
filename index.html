@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infusion Contact Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 20px;
+      border: 2px solid #fff;
+      border-radius: 8px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #fff;
+      border-radius: 4px;
+      background: #000;
+      color: #fff;
+    }
+    button {
+      cursor: pointer;
+      border: 1px solid #fff;
+    }
+    .success {
+      color: #0f0;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Contact Us</h2>
+    <form id="contactForm">
+      <input type="text" id="name" placeholder="Your Name" required>
+      <input type="email" id="email" placeholder="Your Email" required>
+      <input type="text" id="subject" placeholder="Subject" required>
+      <textarea id="message" placeholder="Your Message" rows="5" required></textarea>
+      <button type="submit">Submit</button>
+      <p class="success" id="successMsg"></p>
+    </form>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyB7r7m7yFbiTwn8JR9N7UhTT6UZN8f26uo",
+      authDomain: "ibi-pvt-ltd.firebaseapp.com",
+      projectId: "ibi-pvt-ltd",
+      storageBucket: "ibi-pvt-ltd.firebasestorage.app",
+      messagingSenderId: "426790707099",
+      appId: "1:426790707099:web:679bafdaf60217cd568b3e",
+      measurementId: "G-0GJJQD4TVV"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // Form submit event
+    document.getElementById('contactForm').addEventListener('submit', submitForm);
+
+    function submitForm(e){
+      e.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const subject = document.getElementById('subject').value;
+      const message = document.getElementById('message').value;
+
+      const newQueryRef = db.ref('queries').push();
+      newQueryRef.set({
+        name: name,
+        email: email,
+        subject: subject,
+        message: message,
+        timestamp: new Date().toISOString()
+      })
+      .then(() => {
+        document.getElementById('successMsg').innerText = "Message sent successfully!";
+        document.getElementById('contactForm').reset();
+      })
+      .catch(err => {
+        document.getElementById('successMsg').innerText = "Error! Try again.";
+        console.error(err);
+      });
+    }
+  </script>
+</body>
+</html>
