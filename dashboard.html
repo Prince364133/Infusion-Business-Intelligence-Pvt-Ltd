@@ -352,7 +352,7 @@ const firebaseConfig = {
         console.log('🔄 Fetching queries from Firestore...');
 
         // Fetch data from Firestore
-        const querySnapshot = await db.collection('queries')
+        const querySnapshot = await db.collection('contacts')
           .orderBy('timestamp', 'desc')
           .get();
 
